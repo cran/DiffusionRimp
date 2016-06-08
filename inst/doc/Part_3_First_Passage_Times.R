@@ -1,0 +1,50 @@
+## ---- fig.align='center'-------------------------------------------------
+#===============================================================================
+# Calculate an approximate FPT density for a cubic diffusion confined to
+# a finite strip.
+# Given dXt = 0.5Xt(1-Xt^2)dt+0.5dBt with X0 = 0.5, approximate the first passage
+# time density to the boundaries [-0.5,2].
+#===============================================================================
+  library("DiffusionRimp")
+
+  mu  <- function(X){(0.5*X*(1-X^2))}
+  sig <- function(X) {0.5}
+  res <- MOL.passage(Xs=0.5,t=10,barriers=c(-0.5,2),N=51,delt=1/250)
+  
+  persp(x=res$Xt,y=res$time,z=res$surface,col='white',xlab='X_s',ylab='Time (t)',
+        zlab='Survival Prob.',border=NA,shade=0.5,theta=145,phi =30,ticktype = 'detailed')
+  
+  plot(res$density~res$time, col ='#222299',type='l',main = 'First passage time density')
+
+#-------------------------------------------------------------------------------
+
+## ---- fig.align='center'-------------------------------------------------
+#===============================================================================
+# Bi-cubic diffusion with concentration in the even quadrants.
+#===============================================================================
+ 
+ # Define drift and diffusion terms.
+ mu1   <- function(X,Y){0.5*(1-X^2)*X-1*Y}
+ mu2   <- function(X,Y){0.5*(1-Y^2)*Y-1*X}
+ sig11 <- function(X,Y){1.0}
+ sig22 <- function(X,Y){1.0}
+
+ # Parameters of the problem.
+ Xs    <- 0.5      # Starting X-coordinate
+ Ys    <- 0.5      # Starting Y-coordinate
+ t     <- 10       # Final horizon time
+ Xbar  <- c(-2,2)  # Barriers in X-dim
+ Ybar  <- c(-2,2)  # Barriers in Y-dim
+ Nodes <- 51       # How many nodes x nodes (incl. ends)
+ delt  <- 1/250    # Time step size
+
+ res <- BiMOL.passage(Xs, Ys, t, c(Xbar, Ybar), Nodes, delt)
+ persp(res$Xt,res$Yt,res$surface[,,751],col='white',xlab='X_s',ylab='Y_s',
+        zlab='Survival Prob.',border=NA,shade=0.5,theta=160,phi =30,ticktype = 'detailed')
+ 
+  plot(res$density~res$time, col ='#222299',type='l',main = 'First passage time density')
+#-------------------------------------------------------------------------------
+
+## ----eval=FALSE----------------------------------------------------------
+#  browseVignettes('DiffusionRimp')
+
