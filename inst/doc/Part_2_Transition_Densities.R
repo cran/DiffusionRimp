@@ -55,8 +55,8 @@ for(i in 0:1)
  delt   <- 1/100        # Time stepsize
  
  # Define drift and diffusion terms:
- mu1   <- function(X,Y,t){X*(1-X^2)+sin(2*pi*t/4)*Y}
- mu2   <- function(X,Y,t){Y*(1-Y^2)-sin(2*pi*t/4)*X}
+ mu1   <- function(X,Y,t){X*(1 - X^2) + sin(0.5*pi*t)*Y}
+ mu2   <- function(X,Y,t){Y*(1 - Y^2) - sin(0.5*pi*t)*X}
  sig11 <- function(X,Y,t){0.5}
  sig22 <- function(X,Y,t){0.5}
  
@@ -73,6 +73,34 @@ for(i in 0:1)
                   xlab='Xt',ylab='Yt')
  }
  
+
+## ----fig.align='center'--------------------------------------------------
+# Define drift and diffusion terms:
+mu1   <- function(X,Y,t){-Y*sin(X*pi)} 
+mu2   <- function(X,Y,t){-X*sin(Y*pi)}
+sig11 <- function(X,Y,t){0.5}
+sig22 <- function(X,Y,t){0.5}
+
+# Parameters of the problem:
+X0  <- 0        # Initial X-coordinate
+Y0  <- 0        # Initial Y-coordinate
+s   <- 0        # Starting time
+t   <- 2.5      # Final horizon time
+Xlim <- c(-3,3) # Lattice endpoints in X dim
+Ylim <- c(-3,3) # Lattice endpoints in Y dim
+Nodes <- 121    # How many nodes per dimension (incl. ends)
+delt  <- 1/200  # Step size
+
+# Run the Method of Lines:
+res <- BiMOL.density(X0, Y0, s, t, Xlim, Ylim, Nodes, delt)
+
+time.sequence <- c(0.5,1,1.5,2,2.5)
+k = 0
+for(i in time.sequence)
+{
+  k = k+1
+  persp(res$Xt,res$Yt,res$density[,,i/delt],col='white',xlab='State (X_t)',ylab='State (Y_t)',zlab='Density',border=NA,shade=0.5,theta=145+180*k/5)
+}
 
 ## ----eval=FALSE----------------------------------------------------------
 #  browseVignettes('DiffusionRimp')

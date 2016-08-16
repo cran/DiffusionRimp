@@ -93,7 +93,7 @@ further analysis may be conducted by calling the function \code{BiMOL.density()}
 \donttest{
 #===============================================================================
 
- # For detailed notes and examples on how to use the BiMOL.plot() function, see
+ # For detailed notes and examples on how to use the BiMOL.density() function, see
  # the following vignette:
 
  RShowDoc('Part_2_Transition_Densities',type='html','DiffusionRimp')
